@@ -47,7 +47,7 @@ exports.up = async function (knex) {
       .references("id")
       .inTable("users")
       .onDelete("CASCADE");
-    table.string("text").notNullable();
+    table.string("text").nullable();
     table.integer("isActive").defaultTo(1);
     table.integer("isDeleted").defaultTo(0);
   });
@@ -67,7 +67,7 @@ exports.up = async function (knex) {
       .inTable("company")
       .onDelete("CASCADE");
     table.string("period").notNullable();
-    table.enu("status", ["New", "Resolved", "Canceled"]).defaultTo("New");
+    table.enu("status", ["Active", "Down"]).defaultTo("Active");
     table.string("status_reason").nullable();
     table.integer("isActive").defaultTo(1);
     table.integer("isDeleted").defaultTo(0);
@@ -135,12 +135,12 @@ exports.up = async function (knex) {
       .inTable("contracts")
       .onDelete("CASCADE");
     table
-      .string("pc_id")
+      .string("product_category_id")
       .references("id")
       .inTable("product_category")
       .onDelete("CASCADE");
     table
-      .string("psc_id")
+      .string("product_sub_category_id")
       .references("id")
       .inTable("product_sub_category")
       .onDelete("CASCADE");
