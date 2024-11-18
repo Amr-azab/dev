@@ -128,8 +128,8 @@ exports.up = async function (knex) {
       .inTable("service")
       .onDelete("CASCADE");
     table.enu("asset_type", ["Hardware", "Software"]).defaultTo("Software");
-    table.string("asset_name", 255).notNullable().unique();
-    table.string("serial_number", 255).notNullable();
+    table.string("asset_name", 255).notNullable();
+    table.string("serial_number", 255).notNullable().unique();
     table.boolean("supported").notNullable();
     table.boolean("status").notNullable();
     table.string("priority", 50).notNullable();
