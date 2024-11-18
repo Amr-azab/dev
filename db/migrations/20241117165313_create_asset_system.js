@@ -7,8 +7,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable("attachment_notes", (table) => {
     table.string("id", 36).primary();
     table.string("images", 255).notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -16,8 +15,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable("company", (table) => {
     table.string("id", 36).primary();
     table.string("name", 255).notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -32,8 +30,7 @@ exports.up = async function (knex) {
     table.string("name").notNullable();
     table.enu("role", ["Admin", "Customer", "Support"]).notNullable();
     table.string("phone", 15).unique().notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -51,8 +48,7 @@ exports.up = async function (knex) {
       .inTable("users")
       .onDelete("CASCADE");
     table.string("text").nullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -73,8 +69,7 @@ exports.up = async function (knex) {
     table.string("period", 50).notNullable();
     table.enu("status", ["Active", "Down"]).defaultTo("Active");
     table.string("status_reason", 255).nullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -87,8 +82,7 @@ exports.up = async function (knex) {
       .inTable("contracts")
       .onDelete("CASCADE");
     table.string("name", 255).notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -96,8 +90,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable("product_category", (table) => {
     table.string("id", 36).primary();
     table.string("name").notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -110,8 +103,7 @@ exports.up = async function (knex) {
       .inTable("product_category")
       .onDelete("CASCADE");
     table.string("name", 255).notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -124,8 +116,7 @@ exports.up = async function (knex) {
       .inTable("company")
       .onDelete("CASCADE");
     table.string("name").notNullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 
@@ -181,8 +172,7 @@ exports.up = async function (knex) {
     table.string("priority", 50).notNullable();
     table.string("attach_image", 255).nullable();
     table.string("description", 1000).nullable();
-    table.integer("isActive").defaultTo(1);
-    table.integer("isDeleted").defaultTo(0);
+    table.boolean("isDeleted").defaultTo(false);
     table.timestamps(true, true);
   });
 };
