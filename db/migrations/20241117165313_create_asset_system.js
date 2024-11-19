@@ -130,9 +130,9 @@ exports.up = async function (knex) {
     table.enu("asset_type", ["Hardware", "Software"]).defaultTo("Software");
     table.string("asset_name", 255).notNullable();
     table.string("serial_number", 255).notNullable().unique();
-    table.boolean("supported").notNullable();
-    table.boolean("status").notNullable();
-    table.string("priority", 50).notNullable();
+    table.enu("supported", ["Yes", "No"]).defaultTo("Yes");
+    table.enu("status", ["Yes", "No"]).defaultTo("Yes");
+    table.enu("priority", ["High", "Medium", "Low"]).defaultTo("Medium");
     table.string("attach_image", 255).nullable();
     table.string("description", 1000).nullable();
     table.boolean("isDeleted").defaultTo(false);
