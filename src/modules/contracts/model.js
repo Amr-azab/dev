@@ -1,5 +1,4 @@
 const knex = require("../../../db/knex");
-// const generateUniqueId = require("../../utils/generateUniqueId");
 const { v4: uuidv4 } = require("uuid");
 const generateGuiId = require("../../utils/generateGuiid");
 
@@ -65,4 +64,7 @@ exports.updateContract = async (contractId, data) => {
     .first(); // Return the updated asset
 
   return updatedContract;
+};
+exports.select = async (table, columns, whereClause) => {
+  return await knex(table).select(columns).where(whereClause).first();
 };

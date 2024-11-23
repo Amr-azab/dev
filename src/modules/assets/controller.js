@@ -4,8 +4,6 @@ const catchAsync = require("../../utils/catchAsync");
 const knex = require("../../../db/knex");
 const { select } = require("./model");
 
-// const { v4: uuidv4 } = require("uuid");
-
 exports.addAsset = catchAsync(async (req, res, next) => {
   const {
     asset_name,
@@ -36,13 +34,12 @@ exports.addAsset = catchAsync(async (req, res, next) => {
       new AppError(`Serial number ${serial_number} is already in use`, 400)
     );
   }
-  if (company_id) {
-    const foundCompany = await select("company", "*", { id: company_id });
-    if (!foundCompany) {
-      return next(
-        new AppError(`Company with ID ${company_id} does not exist`, 404)
-      );
-    }
+
+  const foundCompany = await select("company", "*", { id: company_id });
+  if (!foundCompany) {
+    return next(
+      new AppError(`Company with ID ${company_id} does not exist`, 404)
+    );
   }
 
   const foundService = await select("service", "*", { id: service_id });
@@ -71,34 +68,37 @@ exports.addAsset = catchAsync(async (req, res, next) => {
         404
       )
     );
-
-  if (asset_site_id) {
-    const foundAssetSite = await select("asset_site", "*", {
-      id: asset_site_id,
-    });
-    if (!foundAssetSite) {
-      return next(
-        new AppError(`Asset Site with ID ${asset_site_id} does not exist`, 404)
-      );
-    }
+  // Check if sub-category belongs to the specified category
+  if (foundProductSubCategory.product_category_id !== product_category_id) {
+    return next(
+      new AppError(
+        `Product Sub-Category with ID ${product_sub_category_id} does not belong to Product Category with ID ${product_category_id}`,
+        400
+      )
+    );
   }
 
-  if (user_id) {
-    const foundUser = await select("users", "*", { id: user_id });
-    if (!foundUser) {
-      return next(
-        new AppError(`Contract with ID ${user_id} does not exist`, 404)
-      );
-    }
+  const foundAssetSite = await select("asset_site", "*", {
+    id: asset_site_id,
+  });
+  if (!foundAssetSite) {
+    return next(
+      new AppError(`Asset Site with ID ${asset_site_id} does not exist`, 404)
+    );
   }
 
-  if (contract_id) {
-    const foundContract = await select("contracts", "*", { id: contract_id });
-    if (!foundContract) {
-      return next(
-        new AppError(`Contract with ID ${contract_id} does not exist`, 404)
-      );
-    }
+  const foundUser = await select("users", "*", { id: user_id });
+  if (!foundUser) {
+    return next(
+      new AppError(`Contract with ID ${user_id} does not exist`, 404)
+    );
+  }
+
+  const foundContract = await select("contracts", "*", { id: contract_id });
+  if (!foundContract) {
+    return next(
+      new AppError(`Contract with ID ${contract_id} does not exist`, 404)
+    );
   }
   // Check notes_id if provided
   if (notes_id) {
@@ -152,17 +152,6 @@ exports.updateAsset = catchAsync(async (req, res, next) => {
     isDeleted,
   } = req.body;
   const attach_image = req.file ? `/images/${req.file.filename}` : null;
-  // Check for duplicate serial number (if serial number is updated)
-  // const existingAsset = await knex("assets").where({ id: assetId }).first();
-  // if (
-  //   serial_number &&
-  //   existingAsset.serial_number !== serial_number &&
-  //   (await isSerialNumberDuplicate(serial_number))
-  // ) {
-  //   return next(
-  //     new AppError(`Serial number ${serial_number} is already in use`, 400)
-  //   );
-  // }
 
   if (company_id) {
     const foundCompany = await select("company", "*", { id: company_id });
@@ -203,6 +192,18 @@ exports.updateAsset = catchAsync(async (req, res, next) => {
         new AppError(
           `Company with ID ${product_sub_category_id} does not exist`,
           404
+        )
+      );
+    }
+    // Check if the sub-category belongs to the specified category
+    if (
+      product_category_id &&
+      foundProductSubCategory.product_category_id !== product_category_id
+    ) {
+      return next(
+        new AppError(
+          `Product Sub-Category with ID ${product_sub_category_id} does not belong to Product Category with ID ${product_category_id}`,
+          400
         )
       );
     }

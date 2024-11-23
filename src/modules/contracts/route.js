@@ -1,7 +1,17 @@
 const express = require("express");
 const contractController = require("./controller");
+const validate = require("../../utils/validationMiddleware");
+const { createContractSchema, uodateContractSchema } = require("./validations");
 const router = express.Router();
-router.post("/create-contract", contractController.createContract);
-router.patch("/update-contract/:contractId", contractController.updateContract);
+router.post(
+  "/create-contract",
+  validate(createContractSchema),
+  contractController.createContract
+);
+router.patch(
+  "/update-contract/:contractId",
+  validate(uodateContractSchema),
+  contractController.updateContract
+);
 
 module.exports = router;

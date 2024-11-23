@@ -1,11 +1,21 @@
 const express = require("express");
 const assetController = require("./controller");
-const upload = require("../../utils/upload");
+const upload = require("../../utils/uploadPhotoMiddleware");
+const validate = require("../../utils/validationMiddleware");
+const { createAssetSchema, updateAssetSchema } = require("./validations");
 const router = express.Router();
-router.post("/create-asset", upload.single("photo"), assetController.addAsset);
+
+router.post(
+  "/create-asset",
+  upload.single("photo"),
+  validate(createAssetSchema), // Validate asset before processing the creation
+  assetController.addAsset
+);
+
 router.patch(
   "/update-asset/:assetId",
   upload.single("photo"),
+  validate(updateAssetSchema), // Validate asset before processing the creation
   assetController.updateAsset
 );
 
