@@ -13,7 +13,7 @@ exports.seed = async function (knex) {
     {
       id: uuidv4(),
       HrId: "0001",
-      company_id: "4283ba9d-133d-45f4-a0cd-b2b2bc0672de", // Referencing a company (replace with valid company IDs)
+      company_id: "948628d2-18aa-4801-87c0-87ce59b0aa78", // Referencing a company (replace with valid company IDs)
       name: "admin",
       role: "Admin",
       phone: "01234567890",
@@ -24,9 +24,9 @@ exports.seed = async function (knex) {
     {
       id: uuidv4(),
       HrId: "0002",
-      company_id: "4283ba9d-133d-45f4-a0cd-b2b2bc0672de", // Referencing a company (replace with valid company IDs)
-      name: "ahmed hassan",
-      role: "Customer",
+      company_id: "948628d2-18aa-4801-87c0-87ce59b0aa78", // Referencing a company (replace with valid company IDs)
+      name: "amr mohamed",
+      role: "Support",
       phone: "01098765432",
       isDeleted: false,
       created_at: knex.fn.now(),
@@ -35,9 +35,9 @@ exports.seed = async function (knex) {
     {
       id: uuidv4(),
       HrId: "0003",
-      company_id: "4283ba9d-133d-45f4-a0cd-b2b2bc0672de", // Referencing a company (replace with valid company IDs)
-      name: "Amr mohamed",
-      role: "Support",
+      company_id: "22df9dbd-06b3-4b7a-960e-269cf96d0423", // Referencing a company (replace with valid company IDs)
+      name: "ahmed hassan",
+      role: "Customer",
       phone: "01122334455",
       isDeleted: false,
       created_at: knex.fn.now(),

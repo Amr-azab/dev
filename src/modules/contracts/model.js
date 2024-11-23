@@ -10,7 +10,7 @@ exports.createContract = async (
   status,
   status_reason
 ) => {
-  const guiId = await generateGuiId("contracts", "CONTRACTS");
+  const guiId = await generateGuiId("contracts", "CONTRACT");
   // Insert the new asset
   await knex("contracts").insert({
     id: uuidv4(),

@@ -12,7 +12,7 @@ exports.seed = async function (knex) {
   await knex("asset_site").insert([
     {
       id: uuidv4(),
-      company_id: "c62b6b9c-fd9e-49e0-b555-6adaa310d595", // First company
+      company_id: "22df9dbd-06b3-4b7a-960e-269cf96d0423",
       name: "Heliopolis",
       isDeleted: false,
       created_at: knex.fn.now(),
@@ -20,7 +20,7 @@ exports.seed = async function (knex) {
     },
     {
       id: uuidv4(),
-      company_id: "4283ba9d-133d-45f4-a0cd-b2b2bc0672de", // Second company
+      company_id: "948628d2-18aa-4801-87c0-87ce59b0aa78",
       name: "New Cairo",
       isDeleted: false,
       created_at: knex.fn.now(),
@@ -28,7 +28,7 @@ exports.seed = async function (knex) {
     },
     {
       id: uuidv4(),
-      company_id: "c6b508ad-702e-443c-ab6f-20d2af3d090b", // Third company
+      company_id: "70901333-a8b9-4841-8465-142f7372d79e",
       name: "Nasr City",
       isDeleted: false,
       created_at: knex.fn.now(),

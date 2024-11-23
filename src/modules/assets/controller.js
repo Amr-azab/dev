@@ -24,11 +24,11 @@ exports.addAsset = catchAsync(async (req, res, next) => {
   } = req.body;
   const attach_image = req.file ? `/images/${req.file.filename}` : null;
 
-  if (!asset_name || !serial_number) {
-    return next(
-      new AppError("Asset name and serial number are required.", 400)
-    );
-  }
+  // if (!asset_name || !serial_number) {
+  //   return next(
+  //     new AppError("Asset name and serial number are required.", 400)
+  //   );
+  // }
   if (await assetModel.isSerialNumberDuplicate(serial_number)) {
     return next(
       new AppError(`Serial number ${serial_number} is already in use`, 400)
@@ -86,11 +86,26 @@ exports.addAsset = catchAsync(async (req, res, next) => {
       new AppError(`Asset Site with ID ${asset_site_id} does not exist`, 404)
     );
   }
+  // Validate that the asset site is associated with the specified company
+  if (foundAssetSite.company_id !== company_id) {
+    return next(
+      new AppError(
+        `Asset Site with ID ${asset_site_id} does not belong to Company with ID ${company_id}`,
+        400
+      )
+    );
+  }
 
   const foundUser = await select("users", "*", { id: user_id });
   if (!foundUser) {
+    return next(new AppError(`User with ID ${user_id} does not exist`, 404));
+  }
+  if (foundUser.company_id !== company_id) {
     return next(
-      new AppError(`Contract with ID ${user_id} does not exist`, 404)
+      new AppError(
+        `User with ID ${user_id} does not belong to Company with ID ${company_id}`,
+        400
+      )
     );
   }
 
@@ -98,6 +113,25 @@ exports.addAsset = catchAsync(async (req, res, next) => {
   if (!foundContract) {
     return next(
       new AppError(`Contract with ID ${contract_id} does not exist`, 404)
+    );
+  }
+
+  // Validate that the contract is associated with the specified company
+  if (foundContract.company_id !== company_id) {
+    return next(
+      new AppError(
+        `Contract with ID ${contract_id} does not belong to Company with ID ${company_id}`,
+        400
+      )
+    );
+  }
+  // Validate that the contract is associated with the specified service
+  if (foundContract.service_id !== service_id) {
+    return next(
+      new AppError(
+        `Contract with ID ${contract_id} does not belong to Service with ID ${service_id}`,
+        400
+      )
     );
   }
   // Check notes_id if provided
@@ -166,7 +200,7 @@ exports.updateAsset = catchAsync(async (req, res, next) => {
     const foundService = await select("service", "*", { id: service_id });
     if (!foundService) {
       return next(
-        new AppError(`Company with ID ${service_id} does not exist`, 404)
+        new AppError(`Service with ID ${service_id} does not exist`, 404)
       );
     }
   }
@@ -218,25 +252,62 @@ exports.updateAsset = catchAsync(async (req, res, next) => {
         new AppError(`Asset Site with ID ${asset_site_id} does not exist`, 404)
       );
     }
+    if (company_id && foundAssetSite.company_id !== company_id) {
+      return next(
+        new AppError(
+          `Asset Site with ID ${asset_site_id} does not belong to Company with ID ${company_id}`,
+          400
+        )
+      );
+    }
   }
 
   if (user_id) {
     const foundUser = await select("users", "*", { id: user_id });
     if (!foundUser) {
+      return next(new AppError(`User with ID ${user_id} does not exist`, 404));
+    }
+    if (company_id && foundUser.company_id !== company_id) {
       return next(
-        new AppError(`Contract with ID ${user_id} does not exist`, 404)
+        new AppError(
+          `User with ID ${user_id} does not belong to Company with ID ${company_id}`,
+          400
+        )
       );
     }
   }
 
   if (contract_id) {
     const foundContract = await select("contracts", "*", { id: contract_id });
+
+    // Check if the contract exists
     if (!foundContract) {
       return next(
         new AppError(`Contract with ID ${contract_id} does not exist`, 404)
       );
     }
+
+    // Check if the contract belongs to the specified company
+    if (company_id && foundContract.company_id !== company_id) {
+      return next(
+        new AppError(
+          `Contract with ID ${contract_id} does not belong to Company with ID ${company_id}`,
+          400
+        )
+      );
+    }
+
+    // Check if the contract belongs to the specified service
+    if (service_id && foundContract.service_id !== service_id) {
+      return next(
+        new AppError(
+          `Contract with ID ${contract_id} does not belong to Service with ID ${service_id}`,
+          400
+        )
+      );
+    }
   }
+
   if (notes_id) {
     const foundNote = await select("notes", "*", { id: notes_id });
     if (!foundNote) {
